@@ -1,6 +1,8 @@
 'use strict';
 
-var jsperf_monitor_vm_stat = require('../lib/jsperf.monitor.vm_stat.js');
+var jsperf_monitor_vm_stat = require('../jsperf.monitor.vm_stat.js');
+var jsperf = require('jsperf');
+var fs = require('fs');
 
 /*
   ======== A Handy Little Nodeunit Reference ========
@@ -30,7 +32,11 @@ exports['awesome'] = {
   'no args': function(test) {
     test.expect(1);
     // tests here
-    test.equal(jsperf_monitor_vm_stat.awesome(), 'awesome', 'should be awesome.');
+    var controller = new jsperf.Controller(jsperf_monitor_vm_stat);
+    var indata = fs.readFileSync(__dirname + '/out.txt', 'utf8');
+    controller._processdata(indata);
+    controller._processclose();
+    test.ok(true);
     test.done();
   },
 };

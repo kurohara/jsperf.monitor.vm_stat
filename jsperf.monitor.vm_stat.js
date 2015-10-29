@@ -6,13 +6,14 @@
  * Copyright(C) 2015 Hiroyoshi Kurohara(Microgadget,inc.) all rights reserved.
  */
 
+'use strict';
+
 var fs = require('fs');
 
-var monitor = module.exports = {
-  syntax: fs.readFileSync(require('path').resolve(__dirname,'vm_stat.jison'), 'utf8'),
-  oscommand: "/usr/bin/vm_stat",
-  args: [ "1" ],
-  dataname: "vm_stat",
-};
+var Monitor = function Monitor(params) {
+  this.args = [ "" + params.interval ];
+  this.dataname = "vm_stat";
+  this.syntax = fs.readFileSync(__dirname + '/vm_stat.jison', 'utf8');
+}
 
-
+module.exports = Monitor;
