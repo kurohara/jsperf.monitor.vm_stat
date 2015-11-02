@@ -1,12 +1,21 @@
-/**
+/** -*- tab-width : 2 -*-
+ * parser definition for vm_stat output.
+ *
+ * Copyright(C) 2015 Hiroyoshi Kurohara(Microgadget,inc.).
+ * E-mail: kurohara@yk.rim.or.jp, kurohara@microgadget-inc.com
+ * Lisenced under MIT the lincense.
+ */
 
+/**
 %lex
 
 %%
-/lex
 
-*/
- 
+/lex
+ **/
+
+%options flex
+
 %start stat
 
 %%
@@ -37,13 +46,13 @@ header
 
 symbollist
 	: SYMBOL
-	  { $$ = [ $1 ]; }
+	  { $$ = [ $1.value ]; }
 	| symbollist SYMBOL
-	  { $1.push($2); $$ = $1; }
+	  { $1.push($2.value); $$ = $1; }
 	| symbollist COMPWORD
-	  { $1.push($2); $$ = $1; }
+	  { $1.push($2.value); $$ = $1; }
 	| symbollist NUMBERNAME
-	  { $1.push($2); $$ = $1; }
+	  { $1.push($2.value); $$ = $1; }
 	;
 
 datalist
@@ -55,13 +64,13 @@ datalist
 
 data
 	: IVAL
-	  { yy.keyindex = 0; $$ = {}; $$[yy.keys[yy.keyindex++]] = yy.yylval.value; }
+	  { yy.keyindex = 0; $$ = {}; $$[yy.keys[yy.keyindex++]] = $1.value; }
 	| FVAL
-	  { yy.keyindex = 0; $$ = {}; $$[yy.keys[yy.keyindex++]] = yy.yylval.value; }
+	  { yy.keyindex = 0; $$ = {}; $$[yy.keys[yy.keyindex++]] = $1.value; }
 	| data IVAL
-	  { $1[yy.keys[yy.keyindex++]] = yy.yylval.value; $$ = $1; }
+	  { $1[yy.keys[yy.keyindex++]] = $2.value; $$ = $1; }
 	| data FVAL
-	  { $1[yy.keys[yy.keyindex++]] = yy.yylval.value; $$ = $1; }
+	  { $1[yy.keys[yy.keyindex++]] = $2.value; $$ = $1; }
 	;
 %%
 
